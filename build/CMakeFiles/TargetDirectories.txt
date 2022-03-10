@@ -1,0 +1,3 @@
+C:/Users/Vladislav/DZ1/build/CMakeFiles/DZ1.dir
+C:/Users/Vladislav/DZ1/build/CMakeFiles/edit_cache.dir
+C:/Users/Vladislav/DZ1/build/CMakeFiles/rebuild_cache.dir
