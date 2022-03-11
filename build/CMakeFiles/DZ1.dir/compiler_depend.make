@@ -13,6 +13,7 @@ CMakeFiles/DZ1.dir/src/skyscraperio.c.obj: ../src/skyscraperio.c \
   C:/MinGW/include/string.h \
   C:/MinGW/include/strings.h \
   C:/MinGW/include/wchar.h \
+  C:/MinGW/include/assert.h \
   ../src/skyscraperio.h \
   C:/MinGW/include/stdlib.h
 
@@ -28,6 +29,7 @@ CMakeFiles/DZ1.dir/src/source.c.obj: ../src/source.c \
   C:/MinGW/include/string.h \
   C:/MinGW/include/strings.h \
   C:/MinGW/include/wchar.h \
+  C:/MinGW/include/assert.h \
   ../src/skyscraperio.h \
   C:/MinGW/include/stdlib.h
 
@@ -55,6 +57,8 @@ C:/MinGW/include/string.h:
 C:/MinGW/include/strings.h:
 
 C:/MinGW/include/wchar.h:
+
+C:/MinGW/include/assert.h:
 
 ../src/skyscraperio.h:
 

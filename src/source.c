@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 #include "skyscraperio.h"
-
-#define MAX_SIZE 100
 
 Skyscraper* input(FILE* file, size_t *size) {
     if (file == NULL)
@@ -23,6 +22,11 @@ Skyscraper* input(FILE* file, size_t *size) {
         fscanf_s(file, "%d", &overallHeight);
         fscanf_s(file, "%d", &spireHeight);
 
+        // Check for valid data
+        assert(numberOfFloors >= 0);
+        assert(overallHeight >= 0);
+        assert(spireHeight >= 0);
+
         // For purpose
         strSize = 2;
         purpose = calloc(strSize, sizeof(char));
@@ -33,6 +37,8 @@ Skyscraper* input(FILE* file, size_t *size) {
             purpose = realloc(purpose, ++strSize);
             buf = getc(file);
         }
+
+        assert(strlen(purpose) != 0);
 
         // For region
         strSize = 2;
@@ -45,11 +51,13 @@ Skyscraper* input(FILE* file, size_t *size) {
             buf = getc(file);
         }
 
+        assert(strlen(region) != 0);
+
         skyscrapers = realloc(skyscrapers, sizeof(Skyscraper) * (++*size));
         input_scyscraper(skyscrapers + *size - 1, numberOfFloors, overallHeight, spireHeight,
                          purpose, region);
     }
-
+    
     fclose(file);
     return skyscrapers;
 }
@@ -66,10 +74,10 @@ char check(const char* ch1, const char* ch2) {
     return 0;
 }
 
-int group_by_purpose(Skyscraper *skyscrapers, size_t start, size_t end) {
+int group_by_region(Skyscraper *skyscrapers, size_t start, size_t end) {
     for (size_t i = start; i <= end - 1; ++i) {
         for (size_t j = i + 1; j <= end; ++j) {
-            if (!strcmp(skyscrapers[j].purpose, skyscrapers[i].purpose)) {
+            if (!strcmp(skyscrapers[j].region, skyscrapers[i].region)) {
                 i++;
                 swap(skyscrapers + j, skyscrapers + i);
             }
@@ -78,13 +86,13 @@ int group_by_purpose(Skyscraper *skyscrapers, size_t start, size_t end) {
     return 0;
 }
 
-int group_by_region(Skyscraper *skyscrapers, size_t size) {
+int group_by_purpose(Skyscraper *skyscrapers, size_t size) {
     int start = 0;
     int end = size;
     for (size_t i = 0; i < size - 1; ++i) {
         start = i;
         for (size_t j = i + 1; j < size; ++j) {
-            if (!strcmp(skyscrapers[j].region, skyscrapers[i].region)) {
+            if (!strcmp(skyscrapers[j].purpose, skyscrapers[i].purpose)) {
                 i++;
                 swap(skyscrapers + j, skyscrapers + i);
             }
@@ -92,7 +100,7 @@ int group_by_region(Skyscraper *skyscrapers, size_t size) {
         end = i;
 
         if (start != end) {
-            group_by_purpose(skyscrapers, start, end);
+            group_by_region(skyscrapers, start, end);
         }
     }
     return 0;
@@ -104,7 +112,7 @@ int main() {
     size_t size = 0;
     Skyscraper* skyscrapers = input(file, &size);
 
-    group_by_region(skyscrapers, size);
+    group_by_purpose(skyscrapers, size);
     //sort_by_region(skyscrapers, 0, size - 1);
 
     output_scyscrapers_in_file(skyscrapers, size);

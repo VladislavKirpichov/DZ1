@@ -4,9 +4,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 #include "skyscraperio.h"
-
-#define MAX_SIZE 100
 
 //struct Skyscraper {
 //    int numberOfFloors;
@@ -16,50 +15,6 @@
 //    char* purpose;
 //    char* region;
 //};
-
-char input_scyscraper_info(Skyscraper *skyscraper) {
-    printf("%s", "Number of floors:");
-    scanf("%u", &skyscraper->numberOfFloors);
-
-    printf("%s", "Overral height:");
-    scanf("%u", &skyscraper->overallHeight);
-
-    printf("%s", "Spire height:");
-    scanf("%u", &skyscraper->spireHeight);
-
-    printf("%s", "Purpose of building:");
-    const char *purpose[MAX_SIZE];
-    scanf("%s", purpose);
-    skyscraper->purpose = malloc(strlen(purpose) + 1);
-
-    // Check if we allocated memory
-    if (skyscraper->purpose == NULL) {
-        free(skyscraper->purpose);
-        free(skyscraper);
-        return 0;
-    }
-
-    printf("%s", "Region:");
-    const char *region[MAX_SIZE];
-    scanf("%s", region);
-    skyscraper->region = malloc(strlen(region) + 1);
-
-    // Check if we allocated memory
-    if (skyscraper->region == NULL) {
-        free(skyscraper->purpose);
-        free(skyscraper->region);
-        free(skyscraper);
-        return 0;
-    }
-
-    strcpy(skyscraper->purpose, purpose);
-    strcpy(skyscraper->region, region);
-
-    skyscraper->purpose[strlen(purpose)] = '\0';
-    skyscraper->region[strlen(region)] = '\0';
-
-    return 1;
-}
 
 char input_scyscraper(Skyscraper *skyscraper, int numberOfFloors, int overallHeight, int spireHeight,
                             char* purpose, char* region) {
@@ -73,6 +28,7 @@ char input_scyscraper(Skyscraper *skyscraper, int numberOfFloors, int overallHei
     if (skyscraper->purpose == NULL) {
         free(skyscraper->purpose);
         free(skyscraper);
+        assert(skyscraper->purpose == NULL);
         return 0;
     }
 
@@ -83,6 +39,7 @@ char input_scyscraper(Skyscraper *skyscraper, int numberOfFloors, int overallHei
         free(skyscraper->purpose);
         free(skyscraper->region);
         free(skyscraper);
+        assert(skyscraper->region == NULL);
         return 0;
     }
 

@@ -19,7 +19,6 @@ struct Skyscraper {
 };
 typedef struct Skyscraper Skyscraper;
 
-char input_scyscraper_info(Skyscraper *skyscraper);
 char input_scyscraper(Skyscraper *skyscraper, int numberOfFloors, int overallHeight, int spireHeight,
                             char* purpose, char* region);
 
