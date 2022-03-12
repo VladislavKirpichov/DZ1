@@ -7,8 +7,6 @@
 
 #endif //DZ1_SKYSCRAPERIO_H
 
-#include <stdlib.h>
-
 struct Skyscraper {
     int numberOfFloors;
     int overallHeight;

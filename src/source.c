@@ -4,8 +4,7 @@
 #include "skyscraperio.h"
 
 Skyscraper* input(FILE* file, size_t *size) {
-    if (file == NULL)
-        printf("Error in file reading!");
+    assert(file != NULL);
 
     Skyscraper* skyscrapers = NULL;
     skyscrapers = malloc(sizeof(Skyscraper));
@@ -62,18 +61,6 @@ Skyscraper* input(FILE* file, size_t *size) {
     
     fclose(file);
     return skyscrapers;
-}
-
-char check(const char* ch1, const char* ch2) {
-    while (*ch1 == *ch2) {
-        if (ch1 == ch2 == '\0')
-            return 0;
-
-        ch1++;
-        ch2++;
-    }
-
-    return 0;
 }
 
 int group_by_region(Skyscraper *skyscrapers, size_t start, size_t end) {
