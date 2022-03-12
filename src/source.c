@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <assert.h>
 #include "skyscraperio.h"
 
@@ -9,11 +10,11 @@ Skyscraper* input(FILE* file, size_t *size) {
     Skyscraper* skyscrapers = NULL;
     skyscrapers = malloc(sizeof(Skyscraper));
 
-    int numberOfFloors;
-    int overallHeight;
-    int spireHeight;
-    char* purpose;
-    char* region;
+    int numberOfFloors = 0;
+    int overallHeight = 0;
+    int spireHeight = 0;
+    char* purpose = NULL;
+    char* region = NULL;
 
     size_t strSize = 0;
     char buf = '\0';
@@ -57,6 +58,9 @@ Skyscraper* input(FILE* file, size_t *size) {
         skyscrapers = realloc(skyscrapers, sizeof(Skyscraper) * (++*size));
         input_scyscraper(skyscrapers + *size - 1, numberOfFloors, overallHeight, spireHeight,
                          purpose, region);
+
+        free(purpose);
+        free(region);
     }
     
     fclose(file);
@@ -102,9 +106,8 @@ int main() {
     Skyscraper* skyscrapers = input(file, &size);
 
     group_by_purpose(skyscrapers, size);
-    //sort_by_region(skyscrapers, 0, size - 1);
 
     output_scyscrapers_in_file(skyscrapers, size);
-    free(skyscrapers);
+    free_skyscrapers(skyscrapers, size);
     return 0;
 }

@@ -3,8 +3,8 @@
 //
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 #include "skyscraperio.h"
 
@@ -71,24 +71,31 @@ void output_scyscrapers_in_file(const Skyscraper *const skyscrapers, size_t size
     }
 }
 
-char equal(Skyscraper* first, Skyscraper* second) {
+// Copy second in first
+char cpy(Skyscraper* first, Skyscraper* second) {
     first->numberOfFloors = second->numberOfFloors;
     first->overallHeight = second->overallHeight;
     first->spireHeight = second->spireHeight;
+
+    free(first->purpose);
+    free(first->region);
 
     first->purpose = malloc(strlen(second->purpose));
     strcpy(first->purpose, second->purpose);
     if (first->purpose == NULL) {
         free(first->purpose);
         free(first);
+        assert(first->purpose == NULL);
         return 0;
     }
 
     first->region = malloc(strlen(second->region));
     strcpy(first->region, second->region);
     if (first->region == NULL) {
+        free(first->purpose);
         free(first->region);
         free(first);
+        assert(first->region == NULL);
         return 0;
     }
 
@@ -97,7 +104,23 @@ char equal(Skyscraper* first, Skyscraper* second) {
 
 void swap(Skyscraper* first, Skyscraper* second) {
     Skyscraper* temp = malloc(sizeof(Skyscraper));
-    equal(temp, second);        // temp = second
-    equal(second, first);// second = first
-    equal(first, temp);     // first = temp
+    temp->purpose = malloc(1);
+    temp->region = malloc(1);
+    
+    cpy(temp, second);    // temp = second
+    cpy(second, first);   // second = first
+    cpy(first, temp);     // first = temp
+
+    free(temp->purpose);
+    free(temp->region);
+    free(temp);
+}
+
+void free_skyscrapers(Skyscraper* skyscrapers, size_t size) {
+    for (size_t i = 0; i < size; ++i) {
+        free((skyscrapers + i)->purpose);
+        free((skyscrapers + i)->region);
+    }
+
+    free(skyscrapers);
 }

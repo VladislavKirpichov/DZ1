@@ -9,9 +9,9 @@
 /home/DZ1/io/skyscraperio.c
 stdio.h
 -
-string.h
--
 stdlib.h
+-
+string.h
 -
 assert.h
 -
