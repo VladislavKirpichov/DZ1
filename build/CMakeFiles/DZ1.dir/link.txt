@@ -1,3 +1,1 @@
-"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\DZ1.dir/objects.a
-C:\MinGW\bin\ar.exe qc CMakeFiles\DZ1.dir/objects.a @CMakeFiles\DZ1.dir\objects1.rsp
-gcc -Wl,--whole-archive CMakeFiles\DZ1.dir/objects.a -Wl,--no-whole-archive -o DZ1.exe -Wl,--out-implib,libDZ1.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\DZ1.dir\linklibs.rsp
+/usr/bin/cc  -coverage -lgcov -rdynamic CMakeFiles/DZ1.dir/src/source.c.o -o DZ1  io/libio.a 

@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../io/skyscraperio.h
+
+/home/DZ1/Google_tests/test.cpp
+gtest/gtest.h
+-
+stdio.h
+-
+skyscraperio.h
+/home/DZ1/Google_tests/skyscraperio.h
+

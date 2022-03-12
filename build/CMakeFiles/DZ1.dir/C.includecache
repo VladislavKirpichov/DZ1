@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../io/skyscraperio.h
+
+/home/DZ1/src/source.c
+stdio.h
+-
+string.h
+-
+assert.h
+-
+skyscraperio.h
+/home/DZ1/src/skyscraperio.h
+

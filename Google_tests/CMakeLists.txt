@@ -10,6 +10,6 @@ file(GLOB SOURCES *.cpp)
 find_package(GTest REQUIRED)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_include_directories(${PROJECT_NAME} PUBLIC ${FIB_LIB_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${FIB_LIB_LIBRARIES} GTest::gtest_main)
+target_include_directories(${PROJECT_NAME} PUBLIC ${IO_LIB_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${IO_LIB_LIBRARIES} GTest::gtest_main)
 # Стресс тесты под санитайзерами

@@ -3,15 +3,15 @@ project(DZ1)
 
 add_subdirectory(io)
 
-message("FIB_LIB_INCLUDE_DIRS = ${FIB_LIB_INCLUDE_DIRS}")
-message("FIB_LIB_LIBRARIES = ${FIB_LIB_LIBRARIES}")
+message("IO_LIB_INCLUDE_DIRS = ${IO_LIB_INCLUDE_DIRS}")
+message("IO_LIB_LIBRARIES = ${IO_LIB_LIBRARIES}")
 
 add_executable(${PROJECT_NAME} src/source.c)
 
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -coverage -lgcov" )
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${FIB_LIB_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} PRIVATE ${FIB_LIB_LIBRARIES})
+target_include_directories(${PROJECT_NAME} PUBLIC ${IO_LIB_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${IO_LIB_LIBRARIES})
 
 add_subdirectory(Google_tests)
 
