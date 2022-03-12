@@ -18,9 +18,11 @@ Skyscraper* input(FILE* file, size_t *size) {
 
     size_t strSize = 0;
     char buf = '\0';
-    while(fscanf_s(file, "%d", &numberOfFloors) != EOF) {
-        fscanf_s(file, "%d", &overallHeight);
-        fscanf_s(file, "%d", &spireHeight);
+    while(!feof(file)) {
+
+        fscanf(file, "%d", &numberOfFloors);
+        fscanf(file, "%d", &overallHeight);
+        fscanf(file, "%d", &spireHeight);
 
         // Check for valid data
         assert(numberOfFloors >= 0);
