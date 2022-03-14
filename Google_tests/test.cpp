@@ -43,7 +43,21 @@ bool check_if_eq(Skyscraper* skyscraper1, Skyscraper* skyscraper2) {
     if (strcmp(skyscraper1->purpose, skyscraper2->purpose)) return false;
     if (strcmp(skyscraper1->region, skyscraper2->region)) return false;
 
-    return 1;
+    return true;
+}
+
+bool check_if_eq_files(FILE* file1, FILE* file2) {
+    char ch1 = getc(file1), ch2 = getc(file2);
+    while(!feof(file1) and !feof(file2)) {
+        if (ch1 != ch2) {
+            return false;
+        }
+        ch1 = getc(file1);
+        ch2 = getc(file2);
+    }
+
+    if (feof(file1) and feof(file2)) return true;
+    return false;
 }
 
 TEST(Inputs, Inputs_logic) {
@@ -105,7 +119,7 @@ TEST(Inputs, Input_from_file) {
     delete skyscraper1, skyscraper2, skyscraper3, skyscraper4;
 }
 
-TEST(Cpy, cpy) {
+TEST(Cpy, cpy_test) {
     Skyscraper* skyscraper1 = new Skyscraper();
     Skyscraper* skyscraper2 = new Skyscraper();
 
@@ -121,14 +135,42 @@ TEST(Cpy, cpy) {
     delete skyscraper1, skyscraper2;
 }
 
-// TEST(Logic, Logic_simple_test) {
-//     FILE* test1 = fopen("tests/answer.txt", "r");
-//     FILE* answer1 = fopen("tests/answer1.txt", "r");
+TEST(Group, group_logic) {
+    char inputStr[] = "163 828 100 Residential Europe\n163 828 100 Gym Europe\n163 828 100 Residential Europe\0";
+    FILE* inputFile = fmemopen(inputStr, strlen(inputStr), "r"); // Open string like file
 
-//     Skyscraper* skyscrapers = input("tests/test1.txt", &size);
-//     group_by_purpose(skyscrapers, size);
-//     output_scyscrapers_in_file(skyscrapers, size);
-//     free_skyscrapers(skyscrapers, size);
-    
-//     EXPECT(answer1, test1);
+    char answerStr[] = "163 828 100 Residential Europe\n163 828 100 Residential Europe\n163 828 100 Gym Europe\0";
+    FILE* answerFile = fmemopen(answerStr, strlen(answerStr), "r"); // Open string like file
+
+    size_t inputSize = 0, answerSize = 0;
+    Skyscraper* skyscraper1 = input(inputFile, &inputSize);
+    Skyscraper* skyscraper2 = input(answerFile, &answerSize);
+
+    group_by_purpose(skyscraper1, inputSize);
+
+    EXPECT_EQ(true, check_if_eq(skyscraper1, skyscraper2));
+    fclose(inputFile);
+    fclose(answerFile);
+}
+
+// TEST(Group, file_read_group_logic) {
+//     FILE* testAnswer = fopen("../io/answer.txt", "r");
+//     EXPECT_EQ(true, check_if_eq_files(testAnswer, testAnswer));
+
+//     FILE* inputFile = fopen("../Google_tests/tests/test1.txt", "r");
+//     FILE* answerFile = fopen("../Google_tests/tests/answer1.txt", "r");
+//     size_t inputSize = 0;
+
+//     // Logic
+//     Skyscraper* skyscrapers = input(inputFile, &inputSize);
+//     group_by_purpose(skyscrapers, inputSize);
+//     output_scyscrapers_in_file(skyscrapers, inputSize);
+//     free_skyscrapers(skyscrapers, inputSize);
+
+//     // Program answer
+//     // FILE* testAnswer = fopen("../io/answer.txt", "r");
+
+//     EXPECT_EQ(true, check_if_eq_files(inputFile, answerFile));
+//     fclose(inputFile);
+//     fclose(answerFile);
 // }

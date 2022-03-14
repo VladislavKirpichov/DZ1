@@ -28,4 +28,7 @@ void output_scyscrapers_in_file(const Skyscraper *const skyscrapers, size_t size
 char cpy(Skyscraper* first, Skyscraper* second);
 void swap(Skyscraper* first, Skyscraper* second);
 
+int group_by_region(Skyscraper *skyscrapers, size_t start, size_t end);
+int group_by_purpose(Skyscraper *skyscrapers, size_t size);
+
 void free_skyscrapers(Skyscraper* skyscrapers, size_t size);
