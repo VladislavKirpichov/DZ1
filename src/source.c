@@ -1,5 +1,6 @@
 #include <string.h>
 #include <assert.h>
+#include <stdio.h>
 #include "skyscraperio.h"
 
 int group_by_region(Skyscraper *skyscrapers, size_t start, size_t end) {
@@ -36,7 +37,8 @@ int group_by_purpose(Skyscraper *skyscrapers, size_t size) {
 
 int main() {
     size_t size = 0;
-    Skyscraper* skyscrapers = input(&size);
+    FILE* file = fopen("../io/data.txt", "r");
+    Skyscraper* skyscrapers = input(file, &size);
 
     group_by_purpose(skyscrapers, size);
 

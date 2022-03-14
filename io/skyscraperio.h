@@ -17,7 +17,7 @@ struct Skyscraper {
 };
 typedef struct Skyscraper Skyscraper;
 
-Skyscraper* input(size_t *size);
+Skyscraper* input(FILE* file, size_t *size);
 
 char input_scyscraper(Skyscraper *skyscraper, int numberOfFloors, int overallHeight, int spireHeight,
                             char* purpose, char* region);

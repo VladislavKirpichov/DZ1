@@ -17,12 +17,11 @@
 //    char* region;
 //};
 
-Skyscraper* input(size_t *size) {
-    FILE* file = fopen("../io/data.txt", "r");
-    assert(file != NULL);
+Skyscraper* input(FILE* file, size_t *size) {
+    if (file == NULL)
+        return NULL;
 
-    Skyscraper* skyscrapers = NULL;
-    skyscrapers = malloc(sizeof(Skyscraper));
+    Skyscraper* skyscrapers = malloc(sizeof(Skyscraper));
 
     int numberOfFloors = 0;
     int overallHeight = 0;
@@ -39,9 +38,14 @@ Skyscraper* input(size_t *size) {
         fscanf(file, "%d", &spireHeight);
 
         // Check for valid data
-        assert(numberOfFloors >= 0);
-        assert(overallHeight >= 0);
-        assert(spireHeight >= 0);
+        if (numberOfFloors <= 0) 
+            return NULL;
+
+        if (overallHeight <= 0) 
+            return NULL;
+
+        if (spireHeight < 0) 
+            return NULL;
 
         // For purpose
         strSize = 2;
@@ -54,7 +58,8 @@ Skyscraper* input(size_t *size) {
             buf = getc(file);
         }
 
-        assert(strlen(purpose) != 0);
+        if (strlen(purpose) == 0)
+            return NULL;
 
         // For region
         strSize = 2;
@@ -67,7 +72,8 @@ Skyscraper* input(size_t *size) {
             buf = getc(file);
         }
 
-        assert(strlen(region) != 0);
+        if (strlen(region) == 0)
+            return NULL;
 
         skyscrapers = realloc(skyscrapers, sizeof(Skyscraper) * (++*size));
         input_scyscraper(skyscrapers + *size - 1, numberOfFloors, overallHeight, spireHeight,
@@ -76,8 +82,7 @@ Skyscraper* input(size_t *size) {
         free(purpose);
         free(region);
     }
-    
-    fclose(file);
+
     return skyscrapers;
 }
 
@@ -136,6 +141,7 @@ void output_scyscrapers_in_file(const Skyscraper *const skyscrapers, size_t size
         fprintf(file, "%d\t%d\t%d\t%s\t%s\n", skyscrapers[i].numberOfFloors, skyscrapers[i].overallHeight,
                skyscrapers[i].spireHeight, skyscrapers[i].purpose, skyscrapers[i].region);
     }
+    fclose(file);
 }
 
 // Copy second in first

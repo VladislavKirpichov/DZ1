@@ -21,8 +21,8 @@ extern "C" {
 // }
 
 TEST(Inputs, Input_errors_NULL_str) {
-    char* str = "test";
-    char* test = "\0";
+    char str[] = "test";
+    char test[] = "\0";
     Skyscraper* skyscraper = new Skyscraper();
     EXPECT_EQ(0, input_scyscraper(NULL, 2, 2, 2, str, str));
     EXPECT_EQ(0, input_scyscraper(skyscraper, 2, 2, 2, NULL, NULL));
@@ -56,8 +56,7 @@ TEST(Inputs, Inputs_logic) {
     Skyscraper* skyscraper3 = new Skyscraper();
     Skyscraper* skyscraper4 = new Skyscraper();
 
-    char* myStr1 = new char(4);
-    strcpy(myStr1, "test");
+    char myStr1[] = "test";
 
     input_scyscraper(skyscraper1, 2, 2, 2, myStr1, myStr1);
     input_scyscraper(skyscraper2, 2, 2, 2, myStr1, myStr1);
@@ -68,16 +67,49 @@ TEST(Inputs, Inputs_logic) {
     EXPECT_EQ(false, check_if_eq(skyscraper1, skyscraper3));
     EXPECT_EQ(true, check_if_eq(skyscraper1, skyscraper4));
 
-    delete myStr1;
-    delete skyscraper1, skyscraper2;
+    delete skyscraper1, skyscraper2, skyscraper3, skyscraper4;
+}
+
+TEST(Inputs, Input_from_file) {
+    Skyscraper* skyscraper1 = new Skyscraper();
+    Skyscraper* skyscraper2 = new Skyscraper();
+    Skyscraper* skyscraper3 = new Skyscraper();
+    Skyscraper* skyscraper4 = new Skyscraper();
+
+    char buffer[] = "163 828 100 Residential Europe";
+    FILE* file = fmemopen(buffer, strlen(buffer), "r"); // Open string like file
+
+    size_t size = 0;
+    skyscraper1 = input(file, &size);
+
+    char purpose[] = "Residential";
+    char region[] = "Europe";
+    input_scyscraper(skyscraper2, 163, 828, 100, purpose, region);
+
+    EXPECT_EQ(1, check_if_eq(skyscraper1, skyscraper2));
+    fclose(file);
+
+    // Check for errors
+    char temp1[] = "";
+
+    file = fmemopen(temp1, strlen(temp1), "r");
+    EXPECT_EQ(NULL, input(NULL, &size));
+    EXPECT_EQ(NULL, input(file, &size));
+    fclose(file);
+
+    char temp2[] = "0 828 100 Residential Europe";
+    file = fmemopen(temp2, strlen(temp2), "r");
+    EXPECT_EQ(NULL, input(NULL, &size));
+
+    fclose(file);
+    delete skyscraper1, skyscraper2, skyscraper3, skyscraper4;
 }
 
 TEST(Cpy, cpy) {
     Skyscraper* skyscraper1 = new Skyscraper();
     Skyscraper* skyscraper2 = new Skyscraper();
 
-    char* myStr1 = new char(4);
-    strcpy(myStr1, "test");
+    char myStr1[] = "test";
 
     input_scyscraper(skyscraper1, 2, 2, 2, myStr1, myStr1);
     cpy(skyscraper2, skyscraper1);
@@ -85,4 +117,18 @@ TEST(Cpy, cpy) {
     EXPECT_EQ(true, check_if_eq(skyscraper1, skyscraper2));
     EXPECT_EQ(false, cpy(skyscraper2, NULL));
     EXPECT_EQ(false, cpy(NULL, skyscraper2));
+    
+    delete skyscraper1, skyscraper2;
 }
+
+// TEST(Logic, Logic_simple_test) {
+//     FILE* test1 = fopen("tests/answer.txt", "r");
+//     FILE* answer1 = fopen("tests/answer1.txt", "r");
+
+//     Skyscraper* skyscrapers = input("tests/test1.txt", &size);
+//     group_by_purpose(skyscrapers, size);
+//     output_scyscrapers_in_file(skyscrapers, size);
+//     free_skyscrapers(skyscrapers, size);
+    
+//     EXPECT(answer1, test1);
+// }
