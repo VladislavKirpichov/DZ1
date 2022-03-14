@@ -1,1 +1,1 @@
-/usr/local/bin/c++ -fprofile-arcs -ftest-coverage -O0  -coverage -lgcov -g -Wall -Werror -coverage -lgcov -rdynamic CMakeFiles/Google_tests.dir/test.cpp.o -o Google_tests  ../io/libio.a /usr/lib/x86_64-linux-gnu/libgtest_main.a /usr/lib/x86_64-linux-gnu/libgtest.a -lpthread 
+/usr/local/bin/c++ -fprofile-arcs -ftest-coverage -O0  -coverage -lgcov -g -Wall -Werror -fsanitize=address -coverage -lgcov -rdynamic CMakeFiles/Google_tests.dir/test.cpp.o -o Google_tests  ../io/libio.a /usr/lib/x86_64-linux-gnu/libgtest_main.a /usr/lib/x86_64-linux-gnu/libgtest.a -lpthread 

@@ -1,71 +1,6 @@
-#include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 #include <assert.h>
 #include "skyscraperio.h"
-
-Skyscraper* input(FILE* file, size_t *size) {
-    assert(file != NULL);
-
-    Skyscraper* skyscrapers = NULL;
-    skyscrapers = malloc(sizeof(Skyscraper));
-
-    int numberOfFloors = 0;
-    int overallHeight = 0;
-    int spireHeight = 0;
-    char* purpose = NULL;
-    char* region = NULL;
-
-    size_t strSize = 0;
-    char buf = '\0';
-    while(!feof(file)) {
-
-        fscanf(file, "%d", &numberOfFloors);
-        fscanf(file, "%d", &overallHeight);
-        fscanf(file, "%d", &spireHeight);
-
-        // Check for valid data
-        assert(numberOfFloors >= 0);
-        assert(overallHeight >= 0);
-        assert(spireHeight >= 0);
-
-        // For purpose
-        strSize = 2;
-        purpose = calloc(strSize, sizeof(char));
-        getc(file); buf = getc(file);
-        while ((buf != EOF) && (buf != '\n') && (buf != ' ') && (buf != '\0')) {
-            purpose[strSize - 2] = buf;
-            purpose[strSize - 1] = '\0';
-            purpose = realloc(purpose, ++strSize);
-            buf = getc(file);
-        }
-
-        assert(strlen(purpose) != 0);
-
-        // For region
-        strSize = 2;
-        region = calloc(strSize, sizeof(char));
-        buf = getc(file);
-        while ((buf != EOF) && (buf != '\n') && (buf != ' ') && (buf != '\0')) {
-            region[strSize - 2] = buf;
-            region[strSize - 1] = '\0';
-            region = realloc(region, ++strSize);
-            buf = getc(file);
-        }
-
-        assert(strlen(region) != 0);
-
-        skyscrapers = realloc(skyscrapers, sizeof(Skyscraper) * (++*size));
-        input_scyscraper(skyscrapers + *size - 1, numberOfFloors, overallHeight, spireHeight,
-                         purpose, region);
-
-        free(purpose);
-        free(region);
-    }
-    
-    fclose(file);
-    return skyscrapers;
-}
 
 int group_by_region(Skyscraper *skyscrapers, size_t start, size_t end) {
     for (size_t i = start; i <= end - 1; ++i) {
@@ -100,10 +35,8 @@ int group_by_purpose(Skyscraper *skyscrapers, size_t size) {
 }
 
 int main() {
-    FILE* file = fopen("../src/data.txt", "r");
-
     size_t size = 0;
-    Skyscraper* skyscrapers = input(file, &size);
+    Skyscraper* skyscrapers = input(&size);
 
     group_by_purpose(skyscrapers, size);
 
