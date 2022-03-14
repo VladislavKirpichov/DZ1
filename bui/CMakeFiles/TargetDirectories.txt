@@ -1,9 +1,0 @@
-/home/DZ1/bui/CMakeFiles/rebuild_cache.dir
-/home/DZ1/bui/CMakeFiles/edit_cache.dir
-/home/DZ1/bui/CMakeFiles/DZ1.dir
-/home/DZ1/bui/io/CMakeFiles/rebuild_cache.dir
-/home/DZ1/bui/io/CMakeFiles/edit_cache.dir
-/home/DZ1/bui/io/CMakeFiles/io.dir
-/home/DZ1/bui/Google_tests/CMakeFiles/rebuild_cache.dir
-/home/DZ1/bui/Google_tests/CMakeFiles/edit_cache.dir
-/home/DZ1/bui/Google_tests/CMakeFiles/Google_tests.dir

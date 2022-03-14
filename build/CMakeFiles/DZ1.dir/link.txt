@@ -1,1 +1,0 @@
-/usr/bin/cc  -coverage -lgcov -g -Wall -Werror -rdynamic CMakeFiles/DZ1.dir/src/source.c.o -o DZ1  io/libio.a 
