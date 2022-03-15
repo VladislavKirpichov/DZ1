@@ -9,6 +9,12 @@ file(GLOB SOURCES *.cpp)
 
 find_package(GTest REQUIRED)
 
+file(GLOB TEST_FILES "^test$.txt")
+file(GLOB ANSWER_FILES "^answer$.txt")
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/tests/${TEST_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/tests)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/answers/${ANSWER_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/answers)
+
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${IO_LIB_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${IO_LIB_LIBRARIES} GTest::gtest_main)
