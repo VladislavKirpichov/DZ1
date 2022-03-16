@@ -32,6 +32,7 @@ Skyscraper* input(FILE* file, size_t *size) {
     char* region = NULL;
 
     size_t strSize = 0;
+    size_t tempSize = 0;
     char buf = '\0';
     while(!feof(file)) {
 
@@ -69,12 +70,25 @@ Skyscraper* input(FILE* file, size_t *size) {
 
         // For purpose
         strSize = 2;
+        tempSize = 2;
         purpose = calloc(strSize, sizeof(char));
         buf = getc(file);
         while ((buf != EOF) && (buf != '\n') && (buf != ' ') && (buf != '\0') && (buf != '\t')) {
-            purpose[strSize - 2] = buf;
-            purpose[strSize - 1] = '\0';
-            purpose = realloc(purpose, ++strSize);
+            purpose[tempSize - 2] = buf;
+            purpose[tempSize - 1] = '\0';
+
+            if (tempSize == strSize - 1) {
+                strSize *= 2;
+                purpose = realloc(purpose, strSize);
+            }
+            
+            tempSize++;
+            
+            if (purpose == NULL) {
+                fprintf(stderr, "realloc(purpose) returns NULL");
+                return NULL;
+            }
+            
             buf = getc(file);
         }
 
@@ -88,12 +102,25 @@ Skyscraper* input(FILE* file, size_t *size) {
 
         // For region
         strSize = 2;
+        tempSize = 2;
         region = calloc(strSize, sizeof(char));
         buf = getc(file);
         while ((buf != EOF) && (buf != '\n') && (buf != ' ') && (buf != '\0') && (buf != '\t')) {
-            region[strSize - 2] = buf;
-            region[strSize - 1] = '\0';
-            region = realloc(region, ++strSize);
+            region[tempSize - 2] = buf;
+            region[tempSize - 1] = '\0';
+
+            if (tempSize == strSize - 1) {
+                strSize *= 2;
+                region = realloc(region, strSize);
+            }
+            
+            tempSize++;
+
+            if (region == NULL) {
+                fprintf(stderr, "realloc(purpose) returns NULL");
+                return NULL;
+            }
+
             buf = getc(file);
         }
 
@@ -257,11 +284,12 @@ void swap(Skyscraper* first, Skyscraper* second) {
     free(temp);
 }
 
-void free_skyscrapers(Skyscraper* skyscrapers, size_t size) {
+Skyscraper* free_skyscrapers(Skyscraper* skyscrapers, size_t size) {
     for (size_t i = 0; i < size; ++i) {
         free((skyscrapers + i)->purpose);
         free((skyscrapers + i)->region);
     }
 
     free(skyscrapers);
+    return skyscrapers;
 }
