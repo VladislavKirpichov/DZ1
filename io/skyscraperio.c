@@ -21,7 +21,7 @@
 //};
 
 Skyscraper* input(FILE* file, size_t *size) {
-    if (file == NULL || ferror(file)) {
+    if (file == NULL || ferror(file) || feof(file)) {
         fprintf(stderr, "File error!\n");
         return NULL;
     }
@@ -42,11 +42,11 @@ Skyscraper* input(FILE* file, size_t *size) {
             return skyscrapers;
         };
 
-        if(fscanf(file, "%d", &spireHeight) == EOF) {
+        if(fscanf(file, "%d", &overallHeight) == EOF) {
             return skyscrapers;
         };
 
-        if(fscanf(file, "%d", &overallHeight) == EOF) {
+        if(fscanf(file, "%d", &spireHeight) == EOF) {
             return skyscrapers;
         };
 
