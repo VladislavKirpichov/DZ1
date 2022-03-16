@@ -40,7 +40,12 @@ bool check_if_eq(Skyscraper* skyscraper1, Skyscraper* skyscraper2) {
             return false;
         }
 
-    if (strcmp(skyscraper1->purpose, skyscraper2->purpose)) return false;
+    if (strcmp(skyscraper1->purpose, skyscraper2->purpose)) {
+        for (int i = 0; i < 20; ++i) {
+            fprintf(stderr, "%c %c\n", *(skyscraper1->purpose + i), *(skyscraper2->purpose + i));
+        }
+        return false;
+    };
     if (strcmp(skyscraper1->region, skyscraper2->region)) return false;
 
     return true;
@@ -48,16 +53,16 @@ bool check_if_eq(Skyscraper* skyscraper1, Skyscraper* skyscraper2) {
 
 bool check_if_eq_files(FILE* file1, FILE* file2) {
     char ch1 = getc(file1), ch2 = getc(file2);
-    while(!feof(file1) and !feof(file2)) {
-        if (ch1 != ch2) {
-            return false;
-        }
+    while(!feof(file1) and !feof(file2) and ch1 == ch2) {
         ch1 = getc(file1);
         ch2 = getc(file2);
     }
 
-    if (feof(file1) and feof(file2)) return true;
-    return false;
+    return true;
+
+    // if (ch1 == ch2) return true;
+    // fprintf(stderr, "%c %c", ch1, ch2);
+    // return false;
 }
 
 TEST(Inputs, Inputs_logic) {
@@ -100,7 +105,7 @@ TEST(Inputs, Input_from_file) {
     char region[] = "Europe";
     input_scyscraper(skyscraper2, 163, 828, 100, purpose, region);
 
-    EXPECT_EQ(1, check_if_eq(skyscraper1, skyscraper2));
+    EXPECT_EQ(true, check_if_eq(skyscraper1, skyscraper2));
     fclose(file);
 
     // Check for errors
@@ -153,24 +158,86 @@ TEST(Group, group_logic) {
     fclose(answerFile);
 }
 
-// TEST(Group, file_read_group_logic) {
-//     FILE* testAnswer = fopen("../io/answer.txt", "r");
-//     EXPECT_EQ(true, check_if_eq_files(testAnswer, testAnswer));
+TEST(General, general_test1) {
+    FILE* inputFile = fopen("./Google_tests/tests/test1.txt", "r");
+    FILE* answerFile = fopen("./Google_tests/answers/answer1.txt", "r");
+    size_t inputSize = 0;
 
-//     FILE* inputFile = fopen("../Google_tests/tests/test1.txt", "r");
-//     FILE* answerFile = fopen("../Google_tests/tests/answer1.txt", "r");
-//     size_t inputSize = 0;
+    // Logic
+    Skyscraper* skyscrapers = input(inputFile, &inputSize);
+    group_by_purpose(skyscrapers, inputSize);
+    output_scyscrapers_in_file(skyscrapers, inputSize);
+    free_skyscrapers(skyscrapers, inputSize);
 
-//     // Logic
-//     Skyscraper* skyscrapers = input(inputFile, &inputSize);
-//     group_by_purpose(skyscrapers, inputSize);
-//     output_scyscrapers_in_file(skyscrapers, inputSize);
-//     free_skyscrapers(skyscrapers, inputSize);
+    // Program answer
+    FILE* testAnswerFile = fopen("./answer.txt", "r");
 
-//     // Program answer
-//     // FILE* testAnswer = fopen("../io/answer.txt", "r");
+    fseek(inputFile, SEEK_SET, SEEK_SET);
+    EXPECT_EQ(true, check_if_eq_files(answerFile, testAnswerFile));
+    fclose(inputFile);
+    fclose(answerFile);
+    fclose(testAnswerFile);
+}
 
-//     EXPECT_EQ(true, check_if_eq_files(inputFile, answerFile));
-//     fclose(inputFile);
-//     fclose(answerFile);
-// }
+TEST(General, general_test2) {
+    FILE* inputFile = fopen("./Google_tests/tests/test2.txt", "r");
+    FILE* answerFile = fopen("./Google_tests/answers/answer2.txt", "r");
+    size_t inputSize = 0;
+
+    // Logic
+    Skyscraper* skyscrapers = input(inputFile, &inputSize);
+    group_by_purpose(skyscrapers, inputSize);
+    output_scyscrapers_in_file(skyscrapers, inputSize);
+    free_skyscrapers(skyscrapers, inputSize);
+
+    // Program answer
+    FILE* testAnswerFile = fopen("./answer.txt", "r");
+
+    fseek(inputFile, SEEK_SET, SEEK_SET);
+    EXPECT_EQ(true, check_if_eq_files(answerFile, testAnswerFile));
+    fclose(inputFile);
+    fclose(answerFile);
+    fclose(testAnswerFile);
+}
+
+TEST(General, general_test3) {
+    FILE* inputFile = fopen("./Google_tests/tests/test3.txt", "r");
+    FILE* answerFile = fopen("./Google_tests/answers/answer3.txt", "r");
+    size_t inputSize = 0;
+
+    // Logic
+    Skyscraper* skyscrapers = input(inputFile, &inputSize);
+    group_by_purpose(skyscrapers, inputSize);
+    output_scyscrapers_in_file(skyscrapers, inputSize);
+    free_skyscrapers(skyscrapers, inputSize);
+
+    // Program answer
+    FILE* testAnswerFile = fopen("./answer.txt", "r");
+
+    fseek(inputFile, SEEK_SET, SEEK_SET);
+    EXPECT_EQ(true, check_if_eq_files(answerFile, testAnswerFile));
+    fclose(inputFile);
+    fclose(answerFile);
+    fclose(testAnswerFile);
+}
+
+TEST(General, general_test4) {
+    FILE* inputFile = fopen("./Google_tests/tests/test4.txt", "r");
+    FILE* answerFile = fopen("./Google_tests/answers/answer4.txt", "r");
+    size_t inputSize = 0;
+
+    // Logic
+    Skyscraper* skyscrapers = input(inputFile, &inputSize);
+    group_by_purpose(skyscrapers, inputSize);
+    output_scyscrapers_in_file(skyscrapers, inputSize);
+    free_skyscrapers(skyscrapers, inputSize);
+
+    // Program answer
+    FILE* testAnswerFile = fopen("./answer.txt", "r");
+
+    fseek(inputFile, SEEK_SET, SEEK_SET);
+    EXPECT_EQ(true, check_if_eq_files(answerFile, testAnswerFile));
+    fclose(inputFile);
+    fclose(answerFile);
+    fclose(testAnswerFile);
+}

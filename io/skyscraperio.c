@@ -18,8 +18,10 @@
 //};
 
 Skyscraper* input(FILE* file, size_t *size) {
-    if (file == NULL)
+     if (file == NULL || ferror(file) || feof(file)) {
+        fprintf(stderr, "File error!\n");
         return NULL;
+    }
 
     Skyscraper* skyscrapers = malloc(sizeof(Skyscraper));
 
@@ -37,43 +39,71 @@ Skyscraper* input(FILE* file, size_t *size) {
         fscanf(file, "%d", &overallHeight);
         fscanf(file, "%d", &spireHeight);
 
+        if(fscanf(file, "%d", &numberOfFloors) == EOF) {
+            return NULL;
+        };
+
+        if(fscanf(file, "%d", &overallHeight) == EOF) {
+            return NULL;
+        };
+
+        if(fscanf(file, "%d", &spireHeight) == EOF) {
+            return NULL;
+        };
+
         // Check for valid data
-        if (numberOfFloors <= 0) 
+        if (numberOfFloors < 0) {
+            fprintf(stderr, "numberOfFloors < 0\n");
             return NULL;
+        }
 
-        if (overallHeight <= 0) 
+        if (overallHeight < 0) {
+            fprintf(stderr, "overallHeight < 0\n");
             return NULL;
+        }
 
-        if (spireHeight < 0) 
+        if (spireHeight < 0) {
+            fprintf(stderr, "spireHeight < 0\n");
             return NULL;
+        }
 
         // For purpose
         strSize = 2;
         purpose = calloc(strSize, sizeof(char));
-        getc(file); buf = getc(file);
-        while ((buf != EOF) && (buf != '\n') && (buf != ' ') && (buf != '\0')) {
+        buf = getc(file);
+        while ((buf != EOF) && (buf != '\n') && (buf != ' ') && (buf != '\0') && (buf != '\t')) {
             purpose[strSize - 2] = buf;
             purpose[strSize - 1] = '\0';
             purpose = realloc(purpose, ++strSize);
             buf = getc(file);
         }
 
-        if (strlen(purpose) == 0)
+        if (strlen(purpose) == 0) {
+            if (buf == "\0") {
+                return skyscrapers;
+            }
+            fprintf(stderr, "strlen(purpose) == 0, Size: %u", strSize);
             return NULL;
+        }
 
         // For region
         strSize = 2;
         region = calloc(strSize, sizeof(char));
         buf = getc(file);
-        while ((buf != EOF) && (buf != '\n') && (buf != ' ') && (buf != '\0')) {
+        while ((buf != EOF) && (buf != '\n') && (buf != ' ') && (buf != '\0') && (buf != '\t')) {
             region[strSize - 2] = buf;
             region[strSize - 1] = '\0';
             region = realloc(region, ++strSize);
             buf = getc(file);
         }
 
-        if (strlen(region) == 0)
+        if (strlen(region) == 0) {
+            if (buf == "\0") {
+                return skyscrapers;
+            }
+            fprintf(stderr, "strlen(region) == 0, Size: %u", strSize);
             return NULL;
+        }
 
         skyscrapers = realloc(skyscrapers, sizeof(Skyscraper) * (++*size));
         input_scyscraper(skyscrapers + *size - 1, numberOfFloors, overallHeight, spireHeight,
@@ -136,7 +166,7 @@ char input_scyscraper(Skyscraper *skyscraper, int numberOfFloors, int overallHei
 }
 
 void output_scyscrapers_in_file(const Skyscraper *const skyscrapers, size_t size) {
-    FILE* file = fopen("../io/answer.txt", "w");
+    FILE* file = fopen("./answer.txt", "w");
     for (int i = 0; i < size; ++i) {
         fprintf(file, "%d\t%d\t%d\t%s\t%s\n", skyscrapers[i].numberOfFloors, skyscrapers[i].overallHeight,
                skyscrapers[i].spireHeight, skyscrapers[i].purpose, skyscrapers[i].region);
