@@ -20,19 +20,6 @@ extern "C" {
 //     EXPECT 
 // }
 
-TEST(Inputs, Input_errors_NULL_str) {
-    char str[] = "test";
-    char test[] = "\0";
-    Skyscraper* skyscraper = new Skyscraper();
-    EXPECT_EQ(0, input_scyscraper(NULL, 2, 2, 2, str, str));
-    EXPECT_EQ(0, input_scyscraper(skyscraper, 2, 2, 2, NULL, NULL));
-    EXPECT_EQ(0, input_scyscraper(skyscraper, 2, 2, 2, str, NULL));
-    EXPECT_EQ(0, input_scyscraper(skyscraper, 2, 2, 2, NULL, str));
-    EXPECT_EQ(0, input_scyscraper(skyscraper, 2, 2, 2, str, test));
-    EXPECT_EQ(0, input_scyscraper(skyscraper, 2, 2, 2, test, str));
-    delete skyscraper;
-}
-
 bool check_if_eq(Skyscraper* skyscraper1, Skyscraper* skyscraper2) {
     if (skyscraper1->numberOfFloors != skyscraper2->numberOfFloors or
         skyscraper1->overallHeight != skyscraper2->overallHeight or
@@ -46,18 +33,34 @@ bool check_if_eq(Skyscraper* skyscraper1, Skyscraper* skyscraper2) {
     return true;
 }
 
-bool check_if_eq_files(FILE* file1, FILE* file2) {
-    char ch1 = getc(file1), ch2 = getc(file2);
-    while(!feof(file1) and !feof(file2)) {
-        if (ch1 != ch2) {
-            return false;
+// Returns 0 if files are the same
+int check_if_eq_files(FILE* file1, FILE* file2) {
+    int line = 0;
+    char ch1 = fgetc(file1), ch2 = fgetc(file2);
+    while(!feof(file1) and !feof(file2) and (ch1 == ch2)) {
+        ch1 = fgetc(file1);
+        ch2 = fgetc(file2);
+
+        if (ch1 == '\n' and ch2 == '\n') {
+            line++;
         }
-        ch1 = getc(file1);
-        ch2 = getc(file2);
     }
 
-    if (feof(file1) and feof(file2)) return true;
-    return false;
+    if (ch1 == ch2) return 0;
+    return line;
+}
+
+TEST(Inputs, Input_errors_NULL_str) {
+    char str[] = "test";
+    char test[] = "\0";
+    Skyscraper* skyscraper = new Skyscraper();
+    EXPECT_EQ(NULL, input_scyscraper(NULL, 2, 2, 2, str, str));
+    EXPECT_EQ(NULL, input_scyscraper(skyscraper, 2, 2, 2, NULL, NULL));
+    EXPECT_EQ(NULL, input_scyscraper(skyscraper, 2, 2, 2, str, NULL));
+    EXPECT_EQ(NULL, input_scyscraper(skyscraper, 2, 2, 2, NULL, str));
+    EXPECT_EQ(NULL, input_scyscraper(skyscraper, 2, 2, 2, str, test));
+    EXPECT_EQ(NULL, input_scyscraper(skyscraper, 2, 2, 2, test, str));
+    delete skyscraper;
 }
 
 TEST(Inputs, Inputs_logic) {
@@ -111,9 +114,9 @@ TEST(Inputs, Input_from_file) {
     EXPECT_EQ(NULL, input(file, &size));
     fclose(file);
 
-    char temp2[] = "0 828 100 Residential Europe";
+    char temp2[] = "-1 828 100 Residential Europe";
     file = fmemopen(temp2, strlen(temp2), "r");
-    EXPECT_EQ(NULL, input(NULL, &size));
+    EXPECT_EQ(NULL, input(file, &size));
 
     fclose(file);
     delete skyscraper1, skyscraper2, skyscraper3, skyscraper4;
@@ -147,30 +150,44 @@ TEST(Group, group_logic) {
     Skyscraper* skyscraper2 = input(answerFile, &answerSize);
 
     group_by_purpose(skyscraper1, inputSize);
+    EXPECT_EQ(true, !check_if_eq(skyscraper1, skyscraper2));
 
-    EXPECT_EQ(true, check_if_eq(skyscraper1, skyscraper2));
     fclose(inputFile);
     fclose(answerFile);
 }
 
-// TEST(Group, file_read_group_logic) {
-//     FILE* testAnswer = fopen("../io/answer.txt", "r");
-//     EXPECT_EQ(true, check_if_eq_files(testAnswer, testAnswer));
+TEST(Output, output_in_file) {
+    char inputStr[] = "163 828 100 Residential Europe\n163 828 100 Gym Europe\n163 828 100 Residential Europe\n";
+    FILE* inputFile = fmemopen(inputStr, strlen(inputStr), "r"); // Open string like file
 
-//     FILE* inputFile = fopen("../Google_tests/tests/test1.txt", "r");
-//     FILE* answerFile = fopen("../Google_tests/tests/answer1.txt", "r");
-//     size_t inputSize = 0;
+    size_t inputSize = 0;
+    Skyscraper* skyscrapers = input(inputFile, &inputSize);
+    output_scyscrapers_in_file(skyscrapers, inputSize);
+    FILE* testAnswerFile = fopen("./answer.txt", "r");
 
-//     // Logic
-//     Skyscraper* skyscrapers = input(inputFile, &inputSize);
-//     group_by_purpose(skyscrapers, inputSize);
-//     output_scyscrapers_in_file(skyscrapers, inputSize);
-//     free_skyscrapers(skyscrapers, inputSize);
+    printf("%u", check_if_eq_files(testAnswerFile, testAnswerFile));
+    
+    EXPECT_EQ(true, !check_if_eq_files(testAnswerFile, testAnswerFile));
+    fclose(testAnswerFile);
+}
 
-//     // Program answer
-//     // FILE* testAnswer = fopen("../io/answer.txt", "r");
+TEST(Group, file_read_group_logic) {
+    FILE* inputFile = fopen("./Google_tests/tests/test1.txt", "r");
+    FILE* answerFile = fopen("./Google_tests/answers/answer1.txt", "r");
+    size_t inputSize = 0;
 
-//     EXPECT_EQ(true, check_if_eq_files(inputFile, answerFile));
-//     fclose(inputFile);
-//     fclose(answerFile);
-// }
+    // Logic
+    // При одной строчке ввода программа не работает (strlen(region) == 0)
+    Skyscraper* skyscrapers = input(inputFile, &inputSize);
+    group_by_purpose(skyscrapers, inputSize);
+    output_scyscrapers_in_file(skyscrapers, inputSize);
+    free_skyscrapers(skyscrapers, inputSize);
+
+    // Program answer
+    FILE* testAnswerFile = fopen("./answer.txt", "r");
+
+    EXPECT_EQ(true, check_if_eq_files(testAnswerFile, answerFile));
+    fclose(inputFile);
+    fclose(answerFile);
+}
+

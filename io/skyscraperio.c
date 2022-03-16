@@ -3,10 +3,13 @@
 //
 
 #include <stdio.h>
+#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 #include "skyscraperio.h"
+
+#define EXIT_CODE 1
 
 //struct Skyscraper {
 //    int numberOfFloors;
@@ -18,8 +21,10 @@
 //};
 
 Skyscraper* input(FILE* file, size_t *size) {
-    if (file == NULL)
+    if (file == NULL || ferror(file)) {
+        fprintf(stderr, "File error!\n");
         return NULL;
+    }
 
     Skyscraper* skyscrapers = malloc(sizeof(Skyscraper));
 
@@ -33,24 +38,39 @@ Skyscraper* input(FILE* file, size_t *size) {
     char buf = '\0';
     while(!feof(file)) {
 
-        fscanf(file, "%d", &numberOfFloors);
-        fscanf(file, "%d", &overallHeight);
-        fscanf(file, "%d", &spireHeight);
+        if(fscanf(file, "%d", &numberOfFloors) == EOF) {
+            return skyscrapers;
+        };
+
+        if(fscanf(file, "%d", &spireHeight) == EOF) {
+            return skyscrapers;
+        };
+
+        if(fscanf(file, "%d", &overallHeight) == EOF) {
+            return skyscrapers;
+        };
 
         // Check for valid data
-        if (numberOfFloors <= 0) 
+        if (numberOfFloors < 0) {
+            fprintf(stderr, "numberOfFloors < 0\n");
             return NULL;
+        }
 
-        if (overallHeight <= 0) 
+        if (overallHeight < 0) {
+            fprintf(stderr, "overallHeight < 0\n");
             return NULL;
+        }
 
-        if (spireHeight < 0) 
+        if (spireHeight < 0) {
+            fprintf(stderr, "spireHeight < 0\n");
             return NULL;
+        }
 
         // For purpose
         strSize = 2;
         purpose = calloc(strSize, sizeof(char));
-        getc(file); buf = getc(file);
+        purpose[1] = '\0';
+        fgetc(file); buf = fgetc(file);
         while ((buf != EOF) && (buf != '\n') && (buf != ' ') && (buf != '\0')) {
             purpose[strSize - 2] = buf;
             purpose[strSize - 1] = '\0';
@@ -58,24 +78,36 @@ Skyscraper* input(FILE* file, size_t *size) {
             buf = getc(file);
         }
 
-        if (strlen(purpose) == 0)
+        if (strlen(purpose) == 0) {
+            printf("%u", strSize);
+            fprintf(stderr, "strlen(purpose) == 0, Size: %u", strSize);
             return NULL;
+        }
 
         // For region
         strSize = 2;
         region = calloc(strSize, sizeof(char));
-        buf = getc(file);
+        region[1] = '\0';
+        buf = fgetc(file);
         while ((buf != EOF) && (buf != '\n') && (buf != ' ') && (buf != '\0')) {
             region[strSize - 2] = buf;
             region[strSize - 1] = '\0';
             region = realloc(region, ++strSize);
-            buf = getc(file);
+            buf = fgetc(file);
         }
 
-        if (strlen(region) == 0)
+        if (strlen(region) == 0) {
+            if (buf == "\0") {
+                return skyscrapers;
+            }
+
+            printf("%u", strSize);
+            fprintf(stderr, "strlen(region) == 0, Size: %u", strSize);
             return NULL;
+        }
 
         skyscrapers = realloc(skyscrapers, sizeof(Skyscraper) * (++*size));
+
         input_scyscraper(skyscrapers + *size - 1, numberOfFloors, overallHeight, spireHeight,
                          purpose, region);
 
@@ -90,6 +122,17 @@ char input_scyscraper(Skyscraper *skyscraper, int numberOfFloors, int overallHei
                             char* purpose, char* region) {
     
     if (skyscraper == NULL) {
+        fprintf(stderr, "skyscraper == NULL\n");
+        return 0;
+    }
+
+    if (purpose == NULL || *purpose == '\0') {
+        fprintf(stderr, "purpose == NULL\n");
+        return 0;
+    }
+
+    if (region == NULL || *region == '\0') {
+        fprintf(stderr, "region == NULL\n");
         return 0;
     }
 
@@ -97,22 +140,15 @@ char input_scyscraper(Skyscraper *skyscraper, int numberOfFloors, int overallHei
     skyscraper->overallHeight = overallHeight;
     skyscraper->spireHeight = spireHeight;
 
-    if (purpose == NULL || *purpose == '\0') {
-        return 0;
-    }
-
     skyscraper->purpose = malloc(strlen(purpose) + 1);
 
     // Check if we allocated memory
     if (skyscraper->purpose == NULL) {
         free(skyscraper->purpose);
         free(skyscraper);
-        assert(skyscraper->purpose == NULL);
-        return 0;
-    }
 
-    if (region == NULL || *region == '\0') {
-        return 0;
+        perror("malloc(skyscraper->purpose) returns == NULL");
+        exit(EXIT_CODE);
     }
 
     skyscraper->region = malloc(strlen(region) + 1);
@@ -122,7 +158,8 @@ char input_scyscraper(Skyscraper *skyscraper, int numberOfFloors, int overallHei
         free(skyscraper->purpose);
         free(skyscraper->region);
         free(skyscraper);
-        assert(skyscraper->region == NULL);
+        
+        perror("malloc(skyscraper->region) returns NULL");
         return 0;
     }
 
@@ -136,9 +173,9 @@ char input_scyscraper(Skyscraper *skyscraper, int numberOfFloors, int overallHei
 }
 
 void output_scyscrapers_in_file(const Skyscraper *const skyscrapers, size_t size) {
-    FILE* file = fopen("../io/answer.txt", "w");
+    FILE* file = fopen("./answer.txt", "w");
     for (int i = 0; i < size; ++i) {
-        fprintf(file, "%d\t%d\t%d\t%s\t%s\n", skyscrapers[i].numberOfFloors, skyscrapers[i].overallHeight,
+        fprintf(file, "%d %d %d %s %s\n", skyscrapers[i].numberOfFloors, skyscrapers[i].overallHeight,
                skyscrapers[i].spireHeight, skyscrapers[i].purpose, skyscrapers[i].region);
     }
     fclose(file);
@@ -161,8 +198,9 @@ char cpy(Skyscraper* first, Skyscraper* second) {
     if (first->purpose == NULL) {
         free(first->purpose);
         free(first);
-        assert(first->purpose == NULL);
-        return 0;
+
+        perror("malloc(first->purpose) returns NULL");
+        exit(EXIT_CODE);
     }
     strcpy(first->purpose, second->purpose);
     // first->purpose[strlen(second->purpose)] = '\0';
@@ -172,8 +210,9 @@ char cpy(Skyscraper* first, Skyscraper* second) {
         free(first->purpose);
         free(first->region);
         free(first);
-        assert(first->region == NULL);
-        return 0;
+
+        perror("malloc(first->region) returns NULL");
+        exit(EXIT_CODE);
     }
     strcpy(first->region, second->region);
     // first->region[strlen(second->region)] = '\0';
@@ -196,6 +235,7 @@ int group_by_region(Skyscraper *skyscrapers, size_t start, size_t end) {
 int group_by_purpose(Skyscraper *skyscrapers, size_t size) {
     int start = 0;
     int end = size;
+
     for (size_t i = 0; i < size - 1; ++i) {
         start = i;
         for (size_t j = i + 1; j < size; ++j) {
