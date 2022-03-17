@@ -39,3 +39,9 @@ jobs:
 
     - name: run-tests
       run: ./build/Google_tests/Google_tests
+      
+    - name: get-stats
+      run: lcov -t "tests" -o coverage.info -c -d .
+      
+    - name: genhtml
+      run: genhtml -o report coverage.info
