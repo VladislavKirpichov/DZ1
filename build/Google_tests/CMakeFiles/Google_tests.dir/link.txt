@@ -1,0 +1,1 @@
+/usr/bin/c++  -fprofile-arcs -ftest-coverage -coverage -lgcov -g -Wall -Werror -rdynamic CMakeFiles/Google_tests.dir/test.cpp.o -o Google_tests   -L/usr/local/lib/gcc/x86_64-linux-gnu/11.2.0  -L/usr/local/lib64  -L/usr/local/lib  ../io/libio.a -lgcov /usr/lib/x86_64-linux-gnu/libgtest_main.a /usr/lib/x86_64-linux-gnu/libgtest.a -lpthread 

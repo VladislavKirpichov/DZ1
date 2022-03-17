@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.0)
 project(Google_tests)
 
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-fprofile-arcs -ftest-coverage -O0")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -coverage -lgcov" )
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}" )
 
 file(GLOB SOURCES *.cpp)
 
@@ -17,5 +17,5 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/answers/${ANSWER_FILES} DESTINATION ${CMAK
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${IO_LIB_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${IO_LIB_LIBRARIES} GTest::gtest_main)
+target_link_libraries(${PROJECT_NAME} ${IO_LIB_LIBRARIES} ${LCOV_LINK_FLAGS} GTest::gtest_main)
 # Стресс тесты под санитайзерами

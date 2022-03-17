@@ -72,6 +72,12 @@ Skyscraper* input(FILE* file, size_t *size) {
         strSize = 2;
         tempSize = 2;
         purpose = calloc(strSize, sizeof(char));
+
+        if (purpose == NULL) {
+            fprintf(stderr, "purpose == NULL");
+        }
+        
+        purpose[0] = '\0';
         buf = getc(file);
         while ((buf != EOF) && (buf != '\n') && (buf != ' ') && (buf != '\0') && (buf != '\t')) {
             purpose[tempSize - 2] = buf;
@@ -93,9 +99,6 @@ Skyscraper* input(FILE* file, size_t *size) {
         }
 
         if (strlen(purpose) == 0) {
-            if (buf == "\0") {
-                return skyscrapers;
-            }
             fprintf(stderr, "strlen(purpose) == 0, Size: %u", strSize);
             return NULL;
         }
@@ -104,6 +107,12 @@ Skyscraper* input(FILE* file, size_t *size) {
         strSize = 2;
         tempSize = 2;
         region = calloc(strSize, sizeof(char));
+
+        if (region == NULL) {
+            fprintf(stderr, "region == NULL");
+        }
+
+        region[0] = '\0';
         buf = getc(file);
         while ((buf != EOF) && (buf != '\n') && (buf != ' ') && (buf != '\0') && (buf != '\t')) {
             region[tempSize - 2] = buf;
@@ -125,9 +134,6 @@ Skyscraper* input(FILE* file, size_t *size) {
         }
 
         if (strlen(region) == 0) {
-            if (buf == "\0") {
-                return skyscrapers;
-            }
             fprintf(stderr, "strlen(region) == 0, Size: %u", strSize);
             return NULL;
         }
@@ -155,20 +161,23 @@ char input_scyscraper(Skyscraper *skyscraper, int numberOfFloors, int overallHei
     skyscraper->spireHeight = spireHeight;
 
     if (purpose == NULL || *purpose == '\0') {
+        fprintf(stderr, "purpose == NULL || *purpose == '\0'");
         return 0;
     }
-
+    
     skyscraper->purpose = malloc(strlen(purpose) + 1);
 
     // Check if we allocated memory
     if (skyscraper->purpose == NULL) {
         free(skyscraper->purpose);
         free(skyscraper);
-        assert(skyscraper->purpose == NULL);
+
+        fprintf(stderr, "skyscraper->purpose == NULL");
         return 0;
     }
 
     if (region == NULL || *region == '\0') {
+        fprintf(stderr, "region == NULL || *region == '\0'");
         return 0;
     }
 
@@ -179,7 +188,8 @@ char input_scyscraper(Skyscraper *skyscraper, int numberOfFloors, int overallHei
         free(skyscraper->purpose);
         free(skyscraper->region);
         free(skyscraper);
-        assert(skyscraper->region == NULL);
+
+        fprintf(stderr, "skyscraper->region == NULL");
         return 0;
     }
 
@@ -222,7 +232,7 @@ char cpy(Skyscraper* first, Skyscraper* second) {
         return 0;
     }
     strcpy(first->purpose, second->purpose);
-    // first->purpose[strlen(second->purpose)] = '\0';
+    first->purpose[strlen(second->purpose)] = '\0';
 
     first->region = malloc(strlen(second->region) + 1);
     if (first->region == NULL) {
@@ -233,7 +243,7 @@ char cpy(Skyscraper* first, Skyscraper* second) {
         return 0;
     }
     strcpy(first->region, second->region);
-    // first->region[strlen(second->region)] = '\0';
+    first->region[strlen(second->region)] = '\0';
 
     return 1;
 }
