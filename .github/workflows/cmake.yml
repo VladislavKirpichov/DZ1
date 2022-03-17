@@ -32,7 +32,7 @@ jobs:
       run: sudo apt install libgtest-dev
       
     - name: build
-      run: cmake -B ./build
+      run: cmake -Dtest=true -B ./build
       
     - name: make
       run: cmake --build ./build
