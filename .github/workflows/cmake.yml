@@ -18,6 +18,9 @@ jobs:
     
     - name: install gtest
       run: sudo apt install libgtest-dev
+      
+    - name: install-modules
+      run: sudo apt install -y cppcheck clang-tidy python3-pip libc6-dbg cmake libgtest-dev lcov
 
     - name: build
       run: cmake -B ./build
@@ -30,6 +33,9 @@ jobs:
     
     - name: install gtest
       run: sudo apt install libgtest-dev
+      
+    - name: install-modules
+      run: sudo apt install -y cppcheck clang-tidy python3-pip libc6-dbg cmake libgtest-dev lcov
       
     - name: build
       run: cmake -Dtest=true -B ./build
