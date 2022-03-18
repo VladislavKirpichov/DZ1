@@ -73,8 +73,6 @@ Skyscraper* input(FILE* file, size_t *size) {
             buf = fgetc(file);
         }
 
-        printf("%c", *purpose);
-
         if (strlen(purpose) == 0) {
             fprintf(stderr, "%c", *purpose);
             return NULL;
@@ -123,8 +121,8 @@ Skyscraper* input(FILE* file, size_t *size) {
             return NULL;
         }
         
-        if (!input_scyscraper(skyscrapers + *size - 1, numberOfFloors,
-            overallHeight, spireHeight, purpose, region)) {
+        if (input_scyscraper(skyscrapers + *size - 1, numberOfFloors,
+            overallHeight, spireHeight, purpose, region) == -1) {
                 free(purpose);
                 free(region);
                 return NULL;
@@ -222,7 +220,11 @@ int copy_skyscrapers(Skyscraper* dect, Skyscraper* src ) {
         fprintf(stderr, "dect->purpose = malloc return NULL");
         return 0;
     }
-    strcpy(dect->purpose, src->purpose);
+
+    if (dect->purpose != src->purpose) {
+        strcpy(dect->purpose, src->purpose);
+    }
+
     dect->purpose[strlen(src->purpose)] = '\0';
 
     dect->region = malloc(strlen(src->region) + 1);
@@ -234,7 +236,11 @@ int copy_skyscrapers(Skyscraper* dect, Skyscraper* src ) {
         fprintf(stderr, "dect->dect = malloc return NULL");
         return 0;
     }
-    strcpy(dect->region, src->region);
+    
+    if (dect->region != src->region) {
+        strcpy(dect->region, src->region);
+    }
+
     dect->region[strlen(src->region)] = '\0';
 
     return 1;
