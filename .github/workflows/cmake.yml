@@ -47,7 +47,7 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: install valgrind
-      run: sudo apt-get install valgrind
+      run: sudo apt-get install libgtest-dev valgrind
       
     - name: build
       run: cmake -Dtest=true -B ./build
@@ -64,8 +64,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: install valgrind
-      run: sudo apt-get install valgrind
+    - name: install gtest
+      run: sudo apt install libgtest-dev lcov
       
     - name: build
       run: cmake -Dsanitaizer_test=true -B ./build
