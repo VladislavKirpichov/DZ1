@@ -47,7 +47,7 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: install valgrind
-      run: sudo apt-get install libgtest-dev valgrind
+      run: sudo apt install libgtest-dev valgrind
       
     - name: build
       run: cmake -Dtest=true -B ./build
