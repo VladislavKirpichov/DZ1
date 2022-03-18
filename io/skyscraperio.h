@@ -20,8 +20,9 @@ struct Skyscraper {
 typedef struct Skyscraper Skyscraper;
 
 Skyscraper* input(FILE* file, size_t *size);
+int get_str(FILE* file, char** str);
 
-int input_scyscraper(Skyscraper *skyscraper, int numberOfFloors, int overallHeight, int spireHeight,
+int skyscraper_constructor(Skyscraper *skyscraper, int numberOfFloors, int overallHeight, int spireHeight,
                             char* purpose, char* region);
 
 void output_scyscrapers(const Skyscraper *const skyscraper, size_t size);

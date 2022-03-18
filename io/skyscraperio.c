@@ -8,15 +8,6 @@
 #include <assert.h>
 #include "skyscraperio.h"
 
-//struct Skyscraper {
-//    int numberOfFloors;
-//    int overallHeight;
-//    int spireHeight;
-//
-//    char* purpose;
-//    char* region;
-//};
-
 Skyscraper* input(FILE* file, size_t *size) {
      if (file == NULL || ferror(file) || feof(file) || fgetc(file) == EOF) {
         fprintf(stderr, "File error!\n");
@@ -30,7 +21,7 @@ Skyscraper* input(FILE* file, size_t *size) {
     int numberOfFloors = 0;
     int overallHeight = 0;
     int spireHeight = 0;
-    char* purpose = NULL;
+    char* purpose;
     char* region = NULL;
 
     size_t strSize = 0;
@@ -40,74 +31,29 @@ Skyscraper* input(FILE* file, size_t *size) {
         fscanf(file, "%d", &overallHeight) != EOF &&
         fscanf(file, "%d", &spireHeight) != EOF) {
 
-        // For purpose
-        strSize = 2;
-        tempSize = 2;
-        purpose = calloc(strSize, sizeof(char)*1);
+        fgetc(file);
+        strSize = get_str(file, &purpose);
 
-        if (purpose == NULL) {
-            fprintf(stderr, "purpose == NULL");
-            return NULL;
-        }
-        
-        purpose[0] = '\0';
-        fgetc(file); buf = fgetc(file);
-        while ((buf != EOF) && (buf != '\n') && (buf != ' ') && (buf != '\0') && (buf != '\t')) {
-            purpose[tempSize - 2] = buf;
-            purpose[tempSize - 1] = '\0';
-
-            if (tempSize == strSize - 1) {
-                strSize *= 2;
-                purpose = realloc(purpose, strSize);
-
-                if (purpose == NULL) {
-                    fprintf(stderr, "realloc(purpose) returns NULL");
-                    return NULL;
-                }
-            }
-            
-            tempSize++;
-            
-            buf = fgetc(file);
-        }
-
-        if (strlen(purpose) == 0) {
-            fprintf(stderr, "%c", *purpose);
+        if (strSize == -1) {
+            fprintf(stderr, "get_str memory error (purpose)");
             return NULL;
         }
 
-        // For region
-        strSize = 2;
-        tempSize = 2;
-        region = calloc(strSize, sizeof(char)*1);
-
-        if (region == NULL) {
-            fprintf(stderr, "region == NULL");
+        else if (strSize == 0) {
+            fprintf(stderr, "purpose size == 0");
+            return NULL;
         }
 
-        region[0] = '\0';
-        buf = fgetc(file);
-        while ((buf != EOF) && (buf != '\n') && (buf != ' ') && (buf != '\0') && (buf != '\t')) {
-            region[tempSize - 2] = buf;
-            region[tempSize - 1] = '\0';
 
-            if (tempSize == strSize - 1) {
-                strSize *= 2;
-                region = realloc(region, strSize);
+        strSize = get_str(file, &region);
 
-                if (region == NULL) {
-                    fprintf(stderr, "realloc(purpose) returns NULL");
-                    return NULL;
-                }
-            }
-            
-            tempSize++;
-
-            buf = fgetc(file);
+        if (strSize == -1) {
+            fprintf(stderr, "get_str memory error (region)");
+            return NULL;
         }
 
-        if (strlen(region) == 0) {
-            fprintf(stderr, "strlen(region) == 0, Size: %u\n", strSize);
+        else if (strSize == 0) {
+            fprintf(stderr, "region size == 0");
             return NULL;
         }
 
@@ -119,7 +65,7 @@ Skyscraper* input(FILE* file, size_t *size) {
             return NULL;
         }
         
-        if (input_scyscraper(skyscrapers + *size - 1, numberOfFloors,
+        if (skyscraper_constructor(skyscrapers + *size - 1, numberOfFloors,
             overallHeight, spireHeight, purpose, region) == -1) {
             free(purpose);
             free(region);
@@ -134,16 +80,58 @@ Skyscraper* input(FILE* file, size_t *size) {
     return skyscrapers;
 }
 
-int input_scyscraper(Skyscraper *skyscraper, int numberOfFloors, int overallHeight,
-                      int spireHeight, char* purpose, char* region) {
+// return -1: error in malloc 
+int get_str(FILE* file, char** str) {
+    size_t memSize;
+    memSize = 1;
+
+    size_t size;
+    size = 2;
+
+    char buf = '\0';
+
+    memSize = 2;
+    *str = malloc(sizeof(char)*memSize);
+
+    if (*str == NULL)
+        return -1;
+
+    **str = '\0';
+    buf = fgetc(file);
+
+    while ((buf != EOF) && (buf != '\n') && (buf != ' ')
+            && (buf != '\0') && (buf != '\t')) {
+
+        *(*str + size - 2) = buf;
+        *(*str + size - 1) = '\0';
+
+        if (size == memSize) {
+            memSize *= 2;
+            *str = realloc(*str, memSize);
+
+            if (*str == NULL) {
+                return -1;
+            }
+        }
+            
+        size++;
+
+        buf = fgetc(file);
+    }
+
+    return size;
+}
+
+int skyscraper_constructor(Skyscraper *skyscraper, int number_of_floors, int overall_height,
+                      int spire_height, char* purpose, char* region) {
     
     if (skyscraper == NULL) {
         return 0;
     }
 
-    skyscraper->numberOfFloors = numberOfFloors;
-    skyscraper->overallHeight = overallHeight;
-    skyscraper->spireHeight = spireHeight;
+    skyscraper->numberOfFloors = number_of_floors;
+    skyscraper->overallHeight = overall_height;
+    skyscraper->spireHeight = spire_height;
 
     if (purpose == NULL || *purpose == '\0') {
         fprintf(stderr, "purpose == NULL || *purpose == '\0'");
@@ -162,6 +150,7 @@ int input_scyscraper(Skyscraper *skyscraper, int numberOfFloors, int overallHeig
     }
 
     if (region == NULL || *region == '\0') {
+        free(skyscraper->purpose);
         fprintf(stderr, "region == NULL || *region == '\0'");
         return 0;
     }
@@ -199,19 +188,14 @@ void output_scyscrapers_in_file(const Skyscraper *const skyscrapers, size_t size
 
 int copy_skyscrapers(Skyscraper* dect, Skyscraper* src ) {
     if (dect == NULL || src == NULL) {
-
-        // Код ошибки продумать
-        return 0;
+        return -1;
     }
 
     dect->numberOfFloors = src->numberOfFloors;
     dect->overallHeight = src->overallHeight;
     dect->spireHeight = src->spireHeight;
 
-    free(dect->purpose);
-    free(dect->region);
-
-    dect->purpose = malloc(strlen(src->purpose) + 1);
+    dect->purpose = realloc(dect->purpose, strlen(src->purpose) + 1);
     if (dect->purpose == NULL) {
         free(dect->purpose);
         free(dect);
@@ -226,7 +210,8 @@ int copy_skyscrapers(Skyscraper* dect, Skyscraper* src ) {
 
     dect->purpose[strlen(src->purpose)] = '\0';
 
-    dect->region = malloc(strlen(src->region) + 1);
+    dect->region = realloc(dect->region, strlen(src->region) + 1);
+
     if (dect->region == NULL) {
         free(dect->purpose);
         free(dect->region);
@@ -292,9 +277,18 @@ void swap(Skyscraper* first, Skyscraper* second) {
 }
 
 Skyscraper* free_skyscrapers(Skyscraper* skyscrapers, size_t size) {
+    if (skyscrapers == NULL) {
+        return NULL;
+    }
+
     for (size_t i = 0; i < size; ++i) {
-        free((skyscrapers + i)->purpose);
-        free((skyscrapers + i)->region);
+        if ((skyscrapers + i)->purpose != NULL) {
+            free((skyscrapers + i)->purpose);
+        }
+        
+        if ((skyscrapers + i)->region != NULL) {
+            free((skyscrapers + i)->region);
+        }
     }
 
     free(skyscrapers);
