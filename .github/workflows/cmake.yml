@@ -40,8 +40,35 @@ jobs:
     - name: run-tests
       run: ./build/Google_tests/Google_tests
       
-    - name: get-stats
-      run: lcov -t "tests" -o coverage.info -c -d .
+  valgrind:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: install valgrind
+      run: sudo apt-get install valgrind
       
-    - name: genhtml
-      run: genhtml -o report coverage.info
+    - name: build
+      run: cmake -Dtest=true -B ./build
+      
+    - name: make
+      run: cmake --build ./build
+
+    - name: run-tests
+      run: valgrind ./build/Google_tests/Google_tests
+      
+  sanitaizer:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: install valgrind
+      run: sudo apt-get install valgrind
+      
+    - name: build
+      run: cmake -Dsanitaizer_test=true -B ./build
+      
+    - name: run
+      run: cmake --build ./build
