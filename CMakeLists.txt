@@ -9,8 +9,6 @@ add_subdirectory(io)
 message("IO_LIB_INCLUDE_DIRS = ${IO_LIB_INCLUDE_DIRS}")
 message("IO_LIB_LIBRARIES = ${IO_LIB_LIBRARIES}")
 
-# set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*")
-
 add_executable(${PROJECT_NAME} src/source.c)
 
 if (sanitaizer_test)

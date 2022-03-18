@@ -1,2 +1,2 @@
-163	828	100	Residential	Europe
-163	828	100	Residential	Europe
+163 828 100 Residential Europe
+163 828 100 Residential Europe

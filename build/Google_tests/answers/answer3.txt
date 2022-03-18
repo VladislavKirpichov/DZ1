@@ -1,6 +1,0 @@
-7   4  7    Residential  Europe
-7   4  7    Residential  Europe
-7   4  7    Office   Europe
-7   4  7    Office   Europe
-7   4  7    Gym  Europe
-7   4  7    Gym  Europe

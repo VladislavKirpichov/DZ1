@@ -4,7 +4,12 @@
 int main() {
     size_t size = 0;
     FILE* file = fopen("../io/data.txt", "r");
-    Skyscraper* skyscrapers = input(file, &size);
+
+    Skyscraper* skyscrapers;
+    skyscrapers = input(file, &size);
+
+    if (skyscrapers == NULL)
+        return 0;
 
     group_by_purpose(skyscrapers, size);
 

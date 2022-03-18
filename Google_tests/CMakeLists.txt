@@ -18,4 +18,3 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/answers/${ANSWER_FILES} DESTINATION ${CMAK
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${IO_LIB_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${IO_LIB_LIBRARIES} ${LCOV_LINK_FLAGS} GTest::gtest_main)
-# Стресс тесты под санитайзерами

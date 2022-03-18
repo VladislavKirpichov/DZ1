@@ -79,15 +79,15 @@ include Google_tests/CMakeFiles/Google_tests.dir/flags.make
 Google_tests/CMakeFiles/Google_tests.dir/test.cpp.o: Google_tests/CMakeFiles/Google_tests.dir/flags.make
 Google_tests/CMakeFiles/Google_tests.dir/test.cpp.o: Google_tests/test.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/DZ1/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object Google_tests/CMakeFiles/Google_tests.dir/test.cpp.o"
-	cd /home/DZ1/Google_tests && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Google_tests.dir/test.cpp.o -c /home/DZ1/Google_tests/test.cpp
+	cd /home/DZ1/Google_tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Google_tests.dir/test.cpp.o -c /home/DZ1/Google_tests/test.cpp
 
 Google_tests/CMakeFiles/Google_tests.dir/test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Google_tests.dir/test.cpp.i"
-	cd /home/DZ1/Google_tests && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/DZ1/Google_tests/test.cpp > CMakeFiles/Google_tests.dir/test.cpp.i
+	cd /home/DZ1/Google_tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/DZ1/Google_tests/test.cpp > CMakeFiles/Google_tests.dir/test.cpp.i
 
 Google_tests/CMakeFiles/Google_tests.dir/test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Google_tests.dir/test.cpp.s"
-	cd /home/DZ1/Google_tests && /usr/local/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/DZ1/Google_tests/test.cpp -o CMakeFiles/Google_tests.dir/test.cpp.s
+	cd /home/DZ1/Google_tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/DZ1/Google_tests/test.cpp -o CMakeFiles/Google_tests.dir/test.cpp.s
 
 # Object files for target Google_tests
 Google_tests_OBJECTS = \
