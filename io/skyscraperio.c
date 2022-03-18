@@ -81,7 +81,7 @@ Skyscraper* input(FILE* file, size_t *size) {
         // For region
         strSize = 2;
         tempSize = 2;
-        region = calloc(strSize, sizeof(char));
+        region = calloc(strSize, sizeof(char)*1);
 
         if (region == NULL) {
             fprintf(stderr, "region == NULL");
@@ -123,9 +123,10 @@ Skyscraper* input(FILE* file, size_t *size) {
         
         if (input_scyscraper(skyscrapers + *size - 1, numberOfFloors,
             overallHeight, spireHeight, purpose, region) == -1) {
-                free(purpose);
-                free(region);
-                return NULL;
+            free(purpose);
+            free(region);
+            free(skyscrapers);
+            return NULL;
         }
 
         free(purpose);
