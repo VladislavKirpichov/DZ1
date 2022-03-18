@@ -52,8 +52,6 @@ Skyscraper* input(FILE* file, size_t *size) {
         
         purpose[0] = '\0';
         fgetc(file); buf = fgetc(file);
-        // strpbrk
-        // Мб написать, что тут динамически выделяется и поэтому не могу fscanf?
         while ((buf != EOF) && (buf != '\n') && (buf != ' ') && (buf != '\0') && (buf != '\t')) {
             purpose[tempSize - 2] = buf;
             purpose[tempSize - 1] = '\0';
