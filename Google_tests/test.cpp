@@ -220,23 +220,23 @@ TEST(General, general_test4) {
     fclose(testAnswerFile);
 }
 
-// TEST(General, general_test5) {
-//     FILE* inputFile = fopen("./Google_tests/tests/test5.txt", "r");
-//     FILE* answerFile = fopen("./Google_tests/answers/answer5.txt", "r");
-//     size_t inputSize = 0;
+TEST(General, general_test5) {
+    FILE* inputFile = fopen("./Google_tests/tests/test5.txt", "r");
+    FILE* answerFile = fopen("./Google_tests/answers/answer5.txt", "r");
+    size_t inputSize = 0;
 
-//     // Logic
-//     Skyscraper* skyscrapers = input(inputFile, &inputSize);
-//     group_by_purpose(skyscrapers, inputSize);
-//     output_scyscrapers_in_file(skyscrapers, inputSize);
-//     free_skyscrapers(skyscrapers, inputSize);
+    // Logic
+    Skyscraper* skyscrapers = input(inputFile, &inputSize);
+    group_by_purpose(skyscrapers, inputSize);
+    output_scyscrapers_in_file(skyscrapers, inputSize);
+    free_skyscrapers(skyscrapers, inputSize);
 
-//     // Program answer
-//     FILE* testAnswerFile = fopen("./answer.txt", "r");
+    // Program answer
+    FILE* testAnswerFile = fopen("./answer.txt", "r");
 
-//     fseek(inputFile, SEEK_SET, SEEK_SET);
-//     EXPECT_EQ(true, check_if_eq_files(answerFile, testAnswerFile));
-//     fclose(inputFile);
-//     fclose(answerFile);
-//     fclose(testAnswerFile);
-// }
+    fseek(inputFile, SEEK_SET, SEEK_SET);
+    EXPECT_EQ(true, check_if_eq_files(answerFile, testAnswerFile));
+    fclose(inputFile);
+    fclose(answerFile);
+    fclose(testAnswerFile);
+}
