@@ -40,27 +40,6 @@ jobs:
     - name: run-tests
       run: ./build/Google_tests/Google_tests
       
-  valgrind:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v2
-    
-    - name: install gtest
-      run: sudo apt install libgtest-dev
-      
-    - name: install valgrind
-      run: sudo apt-get install valgrind
-      
-    - name: build
-      run: cmake -Dtest=true -B ./build
-      
-    - name: make
-      run: cmake --build ./build
-
-    - name: run-tests
-      run: valgrind ./build/Google_tests/Google_tests
-      
   sanitaizer:
     runs-on: ubuntu-latest
     
