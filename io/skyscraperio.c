@@ -91,7 +91,7 @@ int get_str(FILE* file, char** str) {
     char buf = '\0';
 
     memSize = 2;
-    *str = malloc(sizeof(char)*memSize);
+    *str = malloc(memSize);
 
     if (*str == NULL)
         return -1;
@@ -177,8 +177,12 @@ int skyscraper_constructor(Skyscraper *skyscraper, int number_of_floors, int ove
 }
 
 void output_scyscrapers_in_file(const Skyscraper *const skyscrapers, size_t size) {
+    if (skyscrapers == NULL) {
+        return;
+    }
+    
     FILE* file = fopen(ANSWER_FILE_NAME, "w");
-    for (int i = 0; i < size; ++i) {
+    for (size_t i = 0; i < size; ++i) {
         fprintf(file, "%d %d %d %s %s\n", skyscrapers[i].numberOfFloors,
                 skyscrapers[i].overallHeight, skyscrapers[i].spireHeight,
                 skyscrapers[i].purpose, skyscrapers[i].region);
