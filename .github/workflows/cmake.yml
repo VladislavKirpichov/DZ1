@@ -50,7 +50,7 @@ jobs:
       run: sudo apt install libgtest-dev
       
     - name: install valgrind
-      run: sudo apt install valgrind
+      run: sudo apt-get install valgrind
       
     - name: build
       run: cmake -Dtest=true -B ./build
