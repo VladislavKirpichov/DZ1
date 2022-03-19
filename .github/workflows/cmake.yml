@@ -40,6 +40,9 @@ jobs:
     - name: run-tests
       run: ./build/Google_tests/Google_tests
       
+    - name: get-stats
+      run: lcov -t "tests" -o coverage.info -c -d . && genhtml -o report coverage.info
+      
   sanitaizer:
     runs-on: ubuntu-latest
     
